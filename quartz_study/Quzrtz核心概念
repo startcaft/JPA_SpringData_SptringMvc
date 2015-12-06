@@ -1,0 +1,24 @@
+Quartz框架是一个全功能，开源的任务调用服务。
+
+核心概念：
+1.Quartz核心的概念：scheduler任务调度，Job任务，Trigger触发器，JobDetail任务细节。
+
+	Job任务：其实Job就是一个接口，其中只有一个execute方法：
+	public interface Job {
+		void execute(JobExecutionContext context)
+        	throws JobExecutionException;
+	}
+	开发者只需要实现此接口中的execute接口，在里面实现想做的事情即可。
+	
+	
+	JobDetail任务细节：Quartz执行Job时，需要创建Job实例，但是不能直接操作Job类，
+		所以通过JobDetail来获取Job的名称，描述信息；
+		
+	
+	Trigger触发器：执行Job任务的规则，比如每天，每小时等；
+		一般情况使用SimpleTrigger和CronTrigger，他们都实现自Trigger接口
+		对于复杂的事件表达式来说，比如每个月15号上午几点几分执行Job任务，使用CronTrigger；
+		对于简单的事件来说，比如每天执行几次，使用SimpleTrigger；
+		
+	
+	scheduler任务调度：最核心的概念，需要把JobDetail和Trigger注册到scheduler中，才可以执行。
