@@ -1,0 +1,13 @@
+步骤如下：
+1，加入spring，quartz相应的jar包；
+2，配置spring；
+3，在spring配置文件中配置quartz任务调度：
+	3-1，配置JobDeital
+	3-2，配置触发器Trigger
+	3-3，配置任务调度Scheduler
+	
+在Spring中配置JoDetail时，有两种方式：
+1，编写的Job类，就是一个POJO，不继承或实现任何类和接口；
+2，编写的Job类，继承自Spring中的QuartzJobBean，其实QuartzJobBean实现了Job接口；
+
+本例使用第一种配置方式。
