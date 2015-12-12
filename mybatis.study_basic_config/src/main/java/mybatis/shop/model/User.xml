@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--  <mapper namespace="mybatis.shop.model.User">-->
+<mapper namespace="mybatis.shop.mapper.UserMapper"><!-- 基于Mapper接口的编程方式 -->
+	
+	<!-- 
+		这里的#{xxx},相当于会调用User对象的.getXXX()方法
+	 -->
+	<insert id="add" parameterType="user">
+		insert into t_user (username,password,nickname,type)
+			value (#{username},#{password},#{nickname},#{type})
+	</insert>
+	
+	<update id="update" parameterType="user">
+		update t_user set password=#{password},username=#{username},
+			nickname=#{nickname},type=#{type}
+			where id=#{id}
+	</update>
+	
+	<!-- 
+		这里的#{value}，表示接受的参数是一个基本数据类型
+	 -->
+	<delete id="delete" parameterType="int">
+		delete from t_user where id=#{value}
+	</delete>
+	
+	<select id="load" parameterType="int" resultType="user">
+		select * from t_user where id = #{value}
+	</select>
+	
+	<select id="list" resultType="user">
+		select * from t_user order by id desc
+	</select>
+</mapper>
