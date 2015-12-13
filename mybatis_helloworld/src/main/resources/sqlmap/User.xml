@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	映射文件命名：
+	User.xml：ibatis原始的命名方式；
+	Mapper代理方式的命名则是:xxxxMapper.xml；
+	
+	mapper元素的namespace属性，作用就是对SQL进行分化类管理
+	注意：如果使用Mapper代理的方式开发，namespace有着特殊的重要的作用。
+ -->
+<mapper namespace="test">
+	
+	<!-- 在映射文件中配置很多sql语句 -->
+	<!-- 通过select执行数据库查询
+		id:表示映射文件中的sql，称之为statement的id
+		(将sql语句封装到mappedStatement对象中)
+		
+		【parameterType:执行输入参数的类型】
+		
+		#{id}:其中的id表示输入参数的名称，【如果parameterType为简单类型，#{}中的参数名可以任意,如果paramterType为POJO，#{}中的参数名为pojo中的属性名】
+		
+		【resultType:执行输出结果所映射的Java对象类型,select元素制定resultType表示将单条记录映射成的Java对象类型】
+	 -->
+	<select id="findUserById" parameterType="int" resultType="user">
+		select * from user where id = #{value}
+	</select>
+	
+</mapper>
