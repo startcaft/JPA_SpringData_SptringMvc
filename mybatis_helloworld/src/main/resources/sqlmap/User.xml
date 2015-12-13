@@ -20,12 +20,22 @@
 		
 		【parameterType:执行输入参数的类型】
 		
+		#{}:表示一个占位符?
 		#{id}:其中的id表示输入参数的名称，【如果parameterType为简单类型，#{}中的参数名可以任意,如果paramterType为POJO，#{}中的参数名为pojo中的属性名】
 		
 		【resultType:执行输出结果所映射的Java对象类型,select元素制定resultType表示将单条记录映射成的Java对象类型】
 	 -->
 	<select id="findUserById" parameterType="int" resultType="user">
 		select * from user where id = #{value}
+	</select>
+	
+	<!-- 
+		${}:表示拼接拼接字符串，将接受到的参数不加任何修饰拼接在sql中;
+		使用${}会引起sql注入；
+		${value}:如果传入的是简单类型【只能使用value】;
+	 -->
+	<select id="findUserByName" parameterType="String" resultType="user">
+		select * from user where username like '%${value}%'
 	</select>
 	
 </mapper>
