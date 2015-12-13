@@ -36,6 +36,8 @@ public class MybatisFirst {
 			//selectOne的结果就是与映射文件中statement设置的resultType类型的对象；
 			User user = session.selectOne("test.findUserById", 1);
 			
+			//查询操作不需要事物的支持
+			
 			System.out.println(user.getUsername());
 		} catch (Exception e) {
 			e.printStackTrace();
