@@ -2,6 +2,7 @@ package com.startcaft.mybatis.test.first;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.ibatis.io.Resources;
@@ -47,7 +48,7 @@ public class MybatisFirst {
 		}
 	}
 
-	//根据username，查询，可能返回多条记录
+	// 根据username，查询，可能返回多条记录
 	@Test
 	public void findUserByNameTest() throws IOException {
 
@@ -61,6 +62,91 @@ public class MybatisFirst {
 			for (User user : users) {
 				System.out.println(user.getUsername());
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 释放SqlSession会话资源
+			session.close();
+		}
+	}
+
+	// 新增user表的一条记录，并返回其主键
+	@Test
+	public void insertUserTest() throws IOException {
+
+		SqlSession session = null;
+		try {
+			InputStream inputSream = Resources.getResourceAsStream("mybatis_config.xml");
+			SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(inputSream);
+			session = factory.openSession();
+
+			User user = new User();
+			user.setUsername("王小军");
+			user.setBirthday(new Date());
+			user.setSex("1");
+			user.setAddress("河南郑州");
+
+			session.insert("test.insertUser", user);
+
+			// 因为是insert操作，所以需要提交事物
+			session.commit();
+
+			// 插入记录之后，需要返回该条记录的主键
+			System.out.println(user.getId());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 释放SqlSession会话资源
+			session.close();
+		}
+	}
+
+	// 删除一条user记录
+	@Test
+	public void deleteUserTest() throws IOException {
+
+		SqlSession session = null;
+		try {
+			InputStream inputSream = Resources.getResourceAsStream("mybatis_config.xml");
+			SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(inputSream);
+			session = factory.openSession();
+
+			session.delete("test.deleteUser", 30);
+
+			// 因为是delete操作，所以需要提交事物
+			session.commit();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			// 释放SqlSession会话资源
+			session.close();
+		}
+	}
+
+	// 更新一条user记录
+	@Test
+	public void updateUserTest() throws IOException {
+
+		SqlSession session = null;
+		try {
+			InputStream inputSream = Resources.getResourceAsStream("mybatis_config.xml");
+			SqlSessionFactory factory = new SqlSessionFactoryBuilder().build(inputSream);
+			session = factory.openSession();
+			
+			User user = new User();
+			user.setUsername("王晓军");
+			user.setBirthday(new Date());
+			user.setAddress("中国北京");
+			user.setSex("2");
+			user.setId(28);
+			
+			session.update("test.updateUser", user);
+
+			// 因为是update操作，所以需要提交事物
+			session.commit();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
