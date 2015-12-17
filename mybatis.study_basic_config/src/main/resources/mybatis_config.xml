@@ -11,6 +11,10 @@
  -->
 <configuration>
 	<properties resource="db.properties"/>
+	<!-- 
+		settings配置 如开启二级缓存，开启延迟加载，用到时再配置，不用就不要随便配置，会影响mybatis运行
+	<settings></settings>
+	-->
 	<!-- properties之后配置模型类的别名 -->
 	<typeAliases>
 		<!-- 老版本的mybatis必须一个一个配置模型类的别名-->
@@ -18,6 +22,10 @@
 		<!-- 新版本的mybatis可以使用packname元素，一次性自动完成模型类别名的映射 -->
 		<package name="mybatis.shop.model"/>
 	</typeAliases>
+	<!--  Mybatis中通过typeHandler(类型处理器)来处理jdbc类型和Java类型的转换，
+		一般来说，Mybatis提供的类型处理器就能满足开发，不需要自定额外去自定义类型处理器
+	<typeHandlers></typeHandlers>
+	-->
 	<environments default="development">
 		<environment id="development">
 			<transactionManager type="JDBC" />
@@ -31,6 +39,15 @@
 	</environments>
 	<!-- 将mapper.xml映射文件加载到配置文件中 -->
 	<mappers>
+		<!-- 通过resource属性，一次加载一个映射文件 -->
 		<mapper resource="mybatis/shop/model/User.xml"/>
+		<!-- 通过class属性，通过Mapper接口加载映射文件，需要遵循一些规范
+			需要讲Mapper接口的类名和映射文件的名称保持一致【前提是使用Mapper代理的开发方式，单个加载】
+		<mapper class="com.startcaft.mybatis.mapper.UserMapper"/>
+		-->
+		<!--  批量加载，需要遵循一些规范
+			需要讲Mapper接口的类名和映射文件的名称保持一致【前提是使用Mapper代理的开发方式，推荐使用】
+		<package name="com.startcaft.mybatis.mapper"/>
+		-->
 	</mappers>
 </configuration>
