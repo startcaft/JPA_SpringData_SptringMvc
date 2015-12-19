@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.startcaft.mybatis.mapper.UserMapper">
+	
+	<!-- 
+		定义resultMap
+		type属性：resultMap最终所要映射成的Java类；
+		id属性：resultMap的唯一标识；内部引用的时候使用它，外部应用使用namespace+id；
+	 -->
+	<resultMap type="com.startcaft.mybatis.po.User" id="userResultMap">
+		<!-- 
+			id标签：代表查询结果中的唯一标识
+				column属性：查询结果的列明
+				property属性：被映射类中的属性名
+		 -->
+		<id column="id_" property="id"/>
+		<result column="username_" property="username"/>
+		<result column="sex_" property="sex"/>
+		<result column="address_" property="address"/>
+	</resultMap>
+		
+	<select id="findUserByResultMap" parameterType="int" resultMap="userResultMap">
+		select id id_,username username_,sex sex_,address address_
+			from user where id = #{value}
+	</select>
+	
+</mapper>
