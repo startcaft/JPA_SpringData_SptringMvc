@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	使用mapper代理的开发方式，namespace有特殊重要的作用，
+	namespace必须等于mapper接口的完全限定名
+ -->
+<mapper namespace="com.startcaft.mybatis.mapper.UserMapper">
+
+	<sql id="query_user_where">
+		<if test="user != null">
+			<if test="user.sex != null and user.sex != ''">
+				and user.sex = #{user.sex}
+			</if>
+			<if test="user.username != null and user.username != ''">
+				and user.username like '%${user.username}%'
+			</if>
+			<if test="ids != null">
+				<!-- 
+					使用foreach遍历List<Integer> ids属性；
+					collection属性：指定输入对象中的集合属性；
+					item属性：每次遍历所生成的对象；
+					open属性：开始遍历时需要拼接的SQL字符串；
+					close属性：结束遍历时需要拼接的SQL字符串；
+					separator属性：遍历的两个对象中间需要拼接的SQL字符串；
+					
+					foreahc标签体内：输入辩词遍历需要拼接的SQL字符串；
+				-->
+				<!-- 实现 and (id=1 or id=3 or id=3) 这个SQL的拼接 -->
+				<!--  
+				<foreach collection="ids" item="user_id" open="AND (" close=")" separator="OR">
+					user.id = #{user_id}
+				</foreach>
+				-->
+				<!-- 实现 and id in (1,2,3) -->
+				<foreach collection="ids" item="user_id" open="AND user.id in (" close=")" separator=",">
+					#{user_id}
+				</foreach>
+			</if>
+		</if>
+	</sql>
+	
+	<!-- 用户信息的综合查询 -->
+	<select id="findUserList" parameterType="userQueryVo" resultType="user">
+		select * from user 
+		<where> 
+			<include refid="query_user_where"></include>
+		</where>
+	</select>
+	
+	<!-- 用户信息的综合查询总数-->
+	<select id="findUserListCount" parameterType="userQueryVo" resultType="int">
+		select COUNT(*) from user 
+		<where>
+			<include refid="query_user_where"></include>
+		</where>
+	</select>
+	
+</mapper>
