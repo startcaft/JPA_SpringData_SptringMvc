@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	使用mapper代理的开发方式，namespace有特殊重要的作用，
+	namespace必须等于mapper接口的完全限定名
+ -->
+<mapper namespace="com.startcaft.mybatis.mapper.UserMapper">
+
+	<!-- 
+		sql元素定义一个sql片段：方便其他的statement对其进行引用。
+		id属性：sql片段的唯一标识【外部mapper引用sql片段，使用namespace+id进行引用】
+		
+		经验之谈：一般来说是基于单表来定义sql片段,这样的话，该sql片段的可重用性才比较高
+				在sql片段中，切记不要包含where标签
+	 -->
+	<sql id="query_user_where">
+		<if test="user != null">
+			<!-- 注意这里的 使用的 and 来表示逻辑与  而不是 &&-->
+			<if test="user.sex != null and user.sex != ''">
+				and user.sex = #{user.sex}
+			</if>
+			<if test="user.username != null and user.username != ''">
+				and user.username like '%${user.username}%'
+			</if>
+		</if>
+	</sql>
+	
+	<!-- 用户信息的综合查询 -->
+	<select id="findUserList" parameterType="userQueryVo" resultType="user">
+		select * from user 
+		
+		<!-- where标签，自动去除掉条件中的第一个and -->
+		<where> 
+			<include refid="query_user_where"></include>
+			<!-- 这里还可以引用其他sql片段 -->
+			<!--  
+			<if test="user != null">
+				<if test="user.sex != null and user.sex != ''">
+					and user.sex = #{user.sex}
+				</if>
+				<if test="user.username != null and user.username != ''">
+					and user.username like '%${user.username}%'
+				</if>
+			</if>
+			-->
+		</where>
+	</select>
+	
+	<select id="findUserListCount" parameterType="userQueryVo" resultType="int">
+		select COUNT(*) from user 
+		
+		<where>
+			<include refid="query_user_where"></include>
+			<!-- 这里还可以引用其他sql片段 -->
+			<!--  
+			<if test="user != null">
+				<if test="user.sex != null and user.sex != ''">
+					and user.sex = #{user.sex}
+				</if>
+				<if test="user.username != null and user.username != ''">
+					and user.username like '%${user.username}%'
+				</if>
+			</if>
+			-->
+		</where>
+	</select>
+	
+</mapper>
