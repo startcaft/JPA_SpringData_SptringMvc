@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	使用mapper代理的开发方式，namespace有特殊重要的作用，
+	namespace必须等于mapper接口的完全限定名
+ -->
+<mapper namespace="com.startcaft.mybatis.mapper.UserMapper">
+	
+	<!-- 用户信息的综合查询 -->
+	<select id="findUserList" parameterType="userQueryVo" resultType="user">
+		select * from user where 
+			user.sex = #{user.sex} and user.username like '%${user.username}%'
+	</select>
+	
+</mapper>
