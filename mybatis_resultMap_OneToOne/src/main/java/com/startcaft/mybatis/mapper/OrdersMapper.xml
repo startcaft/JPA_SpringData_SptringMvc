@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.startcaft.mybatis.mapper.OrdersMapper">
+
+	<resultMap type="com.startcaft.mybatis.po.Orders" id="orderUserResultMap">
+		<!-- 配置要映射的订单信息 -->
+		<!-- 如果有多个列组成唯一表示，需要配置多个id节点 -->
+		<id column="id" property="id"/>
+		<result column="user_id" property="user_id"/>
+		<result column="number" property="number"/>
+		<result column="createtime" property="createtime"/>
+		<result column="note" property="note"/>
+		<!-- 配置要映射的关联的用户信息 -->
+		<!-- 
+			association节点，用于映射关联查询，单个对象的信息。
+			property指定要映射的关联对象属性名;
+			javaType指定要映射的关联对象的java类型；
+		-->
+		<association property="user" javaType="com.startcaft.mybatis.po.User">
+			<!-- 这里的id节点，表示关联对象的唯一标识 -->
+			<id column="user_id" property="id"/>
+			<result column="address" property="address"/>
+			<result column="username" property="username"/>
+			<result column="sex" property="sex"/>
+		</association>
+	</resultMap>
+	
+	<!-- 查询订单，关联查询用户，使用resultMap完成-->
+	<select id="findOrdersUserResulrMap" resultMap="orderUserResultMap">
+		select orders.*,user.username,user.address,user.sex
+			from orders,user
+		where orders.user_id = user.id
+	</select>
+
+	<!-- 查询订单，关联查询用户，使用resultType外加POJO包装类完成 -->
+	<select id="findOrdersUser" resultType="com.startcaft.mybaits.vo.OrdersCutom">
+		select orders.*,user.username,user.address,user.sex
+			from orders,user
+		where orders.user_id = user.id
+	</select>
+	
+</mapper>
