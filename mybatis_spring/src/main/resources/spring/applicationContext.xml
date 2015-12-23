@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!-- 加载外部配置文件 -->
+	<context:property-placeholder location="classpath:db.properties" />
+
+	<!-- 配置C3P0数据源 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+		<property name="driverClass" value="${jdbc.driverClass}"></property>
+		<property name="jdbcUrl" value="${jdbc.url}"></property>
+		<property name="user" value="${jdbc.user}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		<property name="initialPoolSize" value="${jdbc.initPoolSize}"></property>
+		<property name="maxPoolSize" value="${jdbc.maxPoolSize}"></property>
+	</bean>
+	
+	<!-- 配置SqlSessionFactory -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 加载mybatis的配置文件 -->
+		<property name="configLocation" value="mybatis/mybatis_config.xml"></property>
+		<!-- 指定数据源 -->
+		<property name="dataSource" ref="dataSource"></property>
+	</bean>
+	
+	<!-- 原始dao开发与Spring的整合方法 -->
+	<!-- 手动为Dao实现类注入SqlSessionFactory对象，因为SqlSessionDaoSupport需要 -->
+	<bean id="userDao" class="com.startcaft.mybatis.dao.UserDao">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+	</bean>
+	
+	<!-- Mapper代理开发与Spring的整合方法 -->
+	<!-- 1，通过MapperFactoryBean来创建代理对象【弊端：需要针对每一个Mapper接口进行配置】 -->
+	<bean id="orderMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="mapperInterface" value="com.startcaft.mybatis.mapper.OrdersMapper"/>
+		<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
+	</bean>
+	
+	
+	<!-- 2， 通过MapperScannerConfigurer扫描Mapper所在的包，自动创建代理对象【并且在Spring容器中进行注册】-->
+	<!-- 扫描出来的Mapper的bean的id为类名的首字母小写 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<!-- 指定Mapper所在的包名，如果扫描多个包，不能使用通配符，每个包之间使用半角逗号","分隔 -->
+		<property name="basePackage" value="com.startcaft.mybatis.mapper"></property>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+</beans>

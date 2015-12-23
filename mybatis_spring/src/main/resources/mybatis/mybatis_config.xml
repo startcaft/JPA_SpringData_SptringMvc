@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<!-- 和Spring整个之后  properties 配置将废除-->
+	<typeAliases>
+		<package name="com.startcaft.mybatis.po"/>
+		<package name="com.startcaft.mybaits.vo"/>
+	</typeAliases>
+	<!-- 和Spring整合之后 environments 配置将废除 -->
+	<!-- 加载映射文件 -->
+	<mappers>
+		<mapper resource="mapping/User.xml"/>
+		<!--  配置MapperScannerConfigurer，就不要在这里加载映射文件了-->
+		<package name="com.startcaft.mybatis.mapper"/>
+	</mappers>
+</configuration>
