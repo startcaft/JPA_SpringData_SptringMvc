@@ -1,0 +1,15 @@
+resultType:
+作用：
+	将查询结果按照sql列名，pojo属性名一致性，映射到pojo中。
+使用场合：
+	常见一些明细记录的展示，比如用户购买商品明细，将关联查询信息全部展示在页面时，
+	此时可直接使用resultType将每一条记录映射到pojo中，在前端页面遍历list即可。
+
+resultMap：
+作用：
+	使用assocation和collection分别完成一对一和一对多高级映射。
+assocation作用：
+	将关联查询信息映射到一个pojo对象中。
+collection作用：
+	将关联查询信息映射到一个list集合中。
+	
