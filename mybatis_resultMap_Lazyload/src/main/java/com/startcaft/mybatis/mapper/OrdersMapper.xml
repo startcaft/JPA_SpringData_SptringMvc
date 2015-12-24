@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+<mapper namespace="com.startcaft.mybatis.mapper.OrdersMapper">
+	
+	<!-- 延迟加载的resultMap -->
+	<resultMap type="com.startcaft.mybatis.po.Orders" id="OrdersUserLazyloadResultMap">
+		<!-- 订单信息 -->
+		<id column="id" property="id"/>
+		<result column="user_id" property="user_id"/>
+		<result column="number" property="number"/>
+		<result column="createtime" property="createtime"/>
+		<result column="note" property="note"/>
+		<!-- 
+			延迟加载用户信息
+			select属性：指定延迟加载需要执行的statement的id，外部引用需要namespace
+			column属性：指定关联查询的列名
+		-->
+		<association property="user" javaType="com.startcaft.mybatis.po.User" select="findUserById" column="user_id">
+		</association>
+	</resultMap>
+	
+	<!-- 查询订单，关联查询用户，用户信息延迟加载 -->
+	<select id="findOrdersUserLazyload" resultMap="OrdersUserLazyloadResultMap">
+		select * from orders
+	</select>
+	
+	<!-- 根据id查询用户记录 -->
+	<select id="findUserById" parameterType="Integer" resultType="com.startcaft.mybatis.po.User">
+		select * from user where id = #{id}
+	</select>
+	
+</mapper>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+	PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<!-- 
+	1，创建mybatis的基本配置文件，名字随意，在该文件中完成和数据库的连接设置操作，以及事物操作。
+	2，创建数据模型类，
+	3，创建mapper.xml配置文件
+	4，创建SQLSession，并通过SQLSession完成对数据库的操作
+ -->
+<configuration>
+	<properties resource="db.properties"/>
+	<settings>
+		<setting name="lazyLoadingEnabled" value="true"/><!-- 开启延迟加载 -->
+		<setting name="aggressiveLazyLoading" value="false"/><!-- 关闭默认的积极加载 -->
+	</settings>
+	<typeAliases>
+		<package name="com.startcaft.mybatis.po"/>
+		<package name="com.startcaft.mybaits.vo"/>
+	</typeAliases>
+	<!-- 和Spring整合之后 environments 配置将废除 -->
+	<environments default="development">
+		<environment id="development">
+			<transactionManager type="JDBC" />
+			<dataSource type="POOLED">
+				<property name="driver" value="${jdbc.driverClass}" />
+				<property name="url" value="${jdbc.url}" />
+				<property name="username" value="${jdbc.user}" />
+				<property name="password" value="${jdbc.password}" />
+			</dataSource>
+		</environment>
+	</environments>
+	<!-- 加载映射文件 -->
+	<mappers>
+		<package name="com.startcaft.mybatis.mapper"/>
+	</mappers>
+</configuration>
