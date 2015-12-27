@@ -2,6 +2,10 @@ package com.startcaft.jpa.spring.test;
 
 
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.junit.Before;
@@ -25,16 +29,17 @@ import com.startcaft.jpa.spring.dao.UserRepository;
  * 3，声明持久层的接口，该接口继承Repository，Repository是一个标记型接口，不包含任何方法，
  * 		如有必要，可以实现Repository其他子接口，其中定义了一些常用的增删改善，以及分页相关的方法。
  * 4，在接口中声明需要的方法，Spring Data将根据给定的策略(后面详细讲解)来为其生成实现代码。
- * 		
  */
 public class JPATest {
 
 	private ApplicationContext context;
+	UserRepository respotiry;
 	
 	@Before
 	public void init(){
 		
 		context = new ClassPathXmlApplicationContext("applicationContext.xml");
+		respotiry = (UserRepository) context.getBean("userRepository");
 	}
 	
 	@Test
@@ -47,11 +52,29 @@ public class JPATest {
 	@Test
 	public void testSave(){
 		
-		UserRepository respotiry = (UserRepository) context.getBean("userRepository");
-		
 		User user = respotiry.getByUsername("张三");
 		
 		System.out.println(user);
 	}
-
+	
+	@Test
+	public void testGetByUsernameStartingWithAndIdLessThan(){
+		
+		List<User> users = respotiry.getByUsernameStartingWithAndIdLessThan("王", 30);
+		
+		System.out.println(users);
+	}
+	
+	@Test
+	public void testGetByIdInAndBrithdayLessThan(){
+		
+		List<Integer> ids = new ArrayList<Integer>();
+		ids.add(10);
+		ids.add(16);
+		ids.add(28);
+		
+		List<User> users = respotiry.getByIdInOrBirthdayLessThan(ids, new Date());
+		
+		System.out.println(users);
+	}
 }
