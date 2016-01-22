@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	id="WebApp_ID" version="3.1">
+	
+	<display-name>MVC_FirstHandler</display-name>
+	
+	<!-- SpringMVC前段控制器 -->
+	<servlet>
+		<servlet-name>springDispatcherServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- 
+			contextConfigLocation配置SpringMVC配置文件的位置
+			如果不配置，则默认加载/WEB-INF/servlet名称-mvc.xml
+		 -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring_mvc.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>springDispatcherServlet</servlet-name>
+		<!-- 
+			第一种：*.action，访问以.action结尾的请求由DispatcherServlet解析。
+			第二种：/，所有的请求都由DispatcherServlet解析，静态文件也是，这种方式可以实现RESTful风格的url。
+		 -->
+		<url-pattern>*.action</url-pattern>
+	</servlet-mapping>
+	
+</web-app>

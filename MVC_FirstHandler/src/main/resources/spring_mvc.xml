@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- SpringMVC 多个适配器和多个映射器可以混合使用，只要按照一定的规则来定义处理器，以及处理器的url映射即可。 -->
+	<!-- 注意，就算把下面注册的适配器和映射器都注释掉，该程序也一样会执行，因为SpringMVC默认会加载org.springframewor.web.servlet包下的DispatcherServlet.properties文件 -->
+	<!-- DispatcherServlet.properties文件中默认就注册了很多映射器，映射器和视图解析器-->
+	
+	<!-- 配置Handler -->
+	<bean id="itemController" name="/queryItems.action" class="com.startcaft.mvc.controller.ItemController"></bean>
+	<bean id="itemControler1" class="com.startcaft.mvc.controller.ItemController1"></bean>
+	
+	<!-- Handler映射器都实现了HandlerMapping接口，其作用是根据url来查找Handler处理器(Controller) -->
+	<!-- 配置Handler映射器，该映射器顾名思义 以bean的name属性来匹配请求地址 -->
+	<!-- <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"></bean> -->
+	
+	<!-- 该Hanlder映射器可以集中配置映射 -->
+	<!--  
+	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="mappings">
+			<props>
+				<prop key="/queryItem1.action">itemController</prop>
+				<prop key="/queryItem2.action">itemController</prop>
+				<prop key="/queryItem3.action">itemControler1</prop>
+			</props>
+		</property>
+	</bean>
+	-->
+	
+	<!-- 配置Handler处理器，所有处理器适配器都继承自HandlerAdapter接口，其作用是按照一定的规则来执行Handler -->
+	<!-- 该HanlderAdapter要求 处理器 实现Controller接口 -->
+	<!-- <bean class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter"></bean> -->
+	
+	<!-- 该HanlderAdapter要求 处理器 实现 HttpRequestHandler接口-->
+	<!-- <bean class="org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter"></bean> -->
+	
+	<!-- 配置视图解析器，默认使用JSTL标签，classpath下必须有JSTL的jar包 -->
+	<!-- <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"></bean> -->
+	
+</beans>
